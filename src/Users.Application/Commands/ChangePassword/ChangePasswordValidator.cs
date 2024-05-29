@@ -1,11 +1,11 @@
 using FluentValidation;
 using Users.Application.RegexUtils;
 
-namespace Users.Application.Commands.ChangeLogin;
+namespace Users.Application.Commands.ChangePassword;
 
-public class ChangeLoginValidator : AbstractValidator<ChangeLogin>
+public class ChangePasswordValidator : AbstractValidator<ChangePassword>
 {
-    public ChangeLoginValidator()
+    public ChangePasswordValidator()
     {
         RuleFor(x => x.CurrentLogin)
             .NotEmpty()
@@ -13,10 +13,10 @@ public class ChangeLoginValidator : AbstractValidator<ChangeLogin>
             .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
             .WithMessage("Login can only contain Latin and Cyrillic letters.");
         
-        RuleFor(x => x.NewLogin)
+        RuleFor(x => x.NewPassword)
             .NotEmpty()
-            .WithMessage("NewLogin is required.")
+            .WithMessage("Password is required.")
             .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
-            .WithMessage("NewLogin can only contain Latin and Cyrillic letters.");
+            .WithMessage("Password can only contain Latin and Cyrillic letters.");
     }
 }

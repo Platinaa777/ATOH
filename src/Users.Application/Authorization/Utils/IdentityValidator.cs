@@ -7,7 +7,7 @@ namespace Users.Application.Authorization.Utils;
 
 public static class IdentityValidator
 {
-    public static async Task ValidateIsAllowedOrThrowAsync(
+    public static async Task ValidateIsAllowedToChangeOrThrowAsync(
         IIdentityProvider identityProvider,
         IIntentionManager intentionManager,
         string login,

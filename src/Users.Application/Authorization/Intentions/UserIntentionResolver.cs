@@ -27,7 +27,8 @@ public class UserIntentionResolver : IIntentionResolver<UserIntention>
         
         return intention switch
         {
-            UserIntention.ChangeUserInfo => user.RevokedOn is null,
+            UserIntention.ChangeUserInfo 
+                or UserIntention.GetUserInfo => user.RevokedOn is null,
             _ => false
         };
     }

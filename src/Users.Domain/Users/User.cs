@@ -60,4 +60,18 @@ public class User
         ModifiedBy = modifiedBy;
         ModifiedOn = modifiedOn;
     }
+    
+    public void ChangeLogin(string newLogin, string modifiedBy, DateTime modifiedOn)
+    {
+        Login = newLogin;
+        ModifiedBy = modifiedBy;
+        ModifiedOn = modifiedOn;
+    }
+    
+    public void ChangePassword(string newPassword, string modifiedBy, DateTime modifiedOn)
+    {
+        Password = newPassword;
+        ModifiedBy = modifiedBy;
+        ModifiedOn = modifiedOn;
+    }
 }

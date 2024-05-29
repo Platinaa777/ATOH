@@ -35,7 +35,10 @@ public class ChangeUserInfoHandler
     
     public async Task<bool> Handle(ChangeBirthday request, CancellationToken ct)
     {
-        await IdentityValidator.ValidateIsAllowedOrThrowAsync(_identityProvider, _intentionManager, request.Login, ct);
+        await IdentityValidator.ValidateIsAllowedToChangeOrThrowAsync(
+            _identityProvider,
+            _intentionManager,
+            request.Login, ct);
 
         var existingUser = await _userSearchRepository.GetByLoginAsync(request.Login, ct);
         if (existingUser is null)
@@ -49,7 +52,10 @@ public class ChangeUserInfoHandler
 
     public async Task<bool> Handle(ChangeName request, CancellationToken ct)
     {
-        await IdentityValidator.ValidateIsAllowedOrThrowAsync(_identityProvider, _intentionManager, request.Login, ct);
+        await IdentityValidator.ValidateIsAllowedToChangeOrThrowAsync(
+            _identityProvider,
+            _intentionManager,
+            request.Login, ct);
 
         var existingUser = await _userSearchRepository.GetByLoginAsync(request.Login, ct);
         if (existingUser is null)
@@ -63,7 +69,10 @@ public class ChangeUserInfoHandler
 
     public async Task<bool> Handle(ChangeGender request, CancellationToken ct)
     {
-        await IdentityValidator.ValidateIsAllowedOrThrowAsync(_identityProvider, _intentionManager, request.Login, ct);
+        await IdentityValidator.ValidateIsAllowedToChangeOrThrowAsync(
+            _identityProvider,
+            _intentionManager,
+            request.Login, ct);
 
         var existingUser = await _userSearchRepository.GetByLoginAsync(request.Login, ct);
         if (existingUser is null)

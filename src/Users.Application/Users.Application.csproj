@@ -13,16 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\ChangePassword\" />
-      <Folder Include="Commands\DeleteUser\" />
-      <Folder Include="Commands\RecoverUser\" />
-      <Folder Include="Queries\GetActivesUsers\" />
-      <Folder Include="Queries\GetUserForAdmin\" />
-      <Folder Include="Queries\GetUserInfo\" />
-      <Folder Include="Queries\GetUsersOlderThan\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Users.Domain\Users.Domain.csproj" />
     </ItemGroup>
 
