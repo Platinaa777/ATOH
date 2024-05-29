@@ -7,9 +7,9 @@ namespace Users.Infrastructure.Repos;
 
 public class UserSearchRepository : IUserSearchRepository
 {
-    private readonly AtohDbContext _dbContext;
+    private readonly AtonDbContext _dbContext;
 
-    public UserSearchRepository(AtohDbContext dbContext)
+    public UserSearchRepository(AtonDbContext dbContext)
     {
         _dbContext = dbContext;
     }

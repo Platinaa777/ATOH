@@ -1,0 +1,22 @@
+version: '3.9'
+
+networks:
+  aton:
+    driver: bridge
+    
+volumes:
+  aton:
+
+services:
+  postgres_db:
+    container_name: postgres_db
+    image: postgres:12
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_USER: denis
+      POSTGRES_PASSWORD: denis123
+      POSTGRES_DB: aton_db
+    networks: [ aton ]
+    volumes:
+      - aton:/var/lib/postgresql/data

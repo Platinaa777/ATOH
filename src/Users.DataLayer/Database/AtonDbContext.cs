@@ -4,9 +4,9 @@ using Users.Domain.Users;
 
 namespace Users.DataLayer.Database;
 
-public class AtohDbContext : DbContext
+public class AtonDbContext : DbContext
 {
-    public AtohDbContext(DbContextOptions<AtohDbContext> options) : base(options)
+    public AtonDbContext(DbContextOptions<AtonDbContext> options) : base(options)
     {
     }
 

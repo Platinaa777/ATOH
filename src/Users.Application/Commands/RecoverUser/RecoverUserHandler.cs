@@ -32,10 +32,10 @@ public class RecoverUserHandler
     
     public async Task<bool> Handle(RecoverUser request, CancellationToken ct)
     {
-        var isAllowedToCreateAdmin = await _intentionManager
+        var isAllowedToRecoverUser = await _intentionManager
             .ResolveAsync(AdminIntention.RecoverUser, ct);
 
-        if (!isAllowedToCreateAdmin)
+        if (!isAllowedToRecoverUser)
             throw new IntentionException();
         
         var existingUser = await _userSearchRepository.GetByLoginAsync(request.Login, ct);

@@ -7,9 +7,9 @@ namespace Users.Infrastructure.Repos;
 
 public class UserRepository : IUserRepository
 {
-    private readonly AtohDbContext _dbContext;
+    private readonly AtonDbContext _dbContext;
 
-    public UserRepository(AtohDbContext dbContext)
+    public UserRepository(AtonDbContext dbContext)
     {
         _dbContext = dbContext;
     }

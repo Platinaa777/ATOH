@@ -10,7 +10,8 @@ builder.Services
     .AddApplicationServices()
     .AddApiLogging()
     .AddCustomSwagger()
-    .AddAuthServices(configuration);
+    .AddAuthServices(configuration)
+    .AddDataLayer(configuration);
 
 var app = builder.Build();
 

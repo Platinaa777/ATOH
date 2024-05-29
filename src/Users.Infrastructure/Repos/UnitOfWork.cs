@@ -5,9 +5,9 @@ namespace Users.Infrastructure.Repos;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly AtohDbContext _dbContext;
+    private readonly AtonDbContext _dbContext;
 
-    public UnitOfWork(AtohDbContext dbContext)
+    public UnitOfWork(AtonDbContext dbContext)
     {
         _dbContext = dbContext;
     }

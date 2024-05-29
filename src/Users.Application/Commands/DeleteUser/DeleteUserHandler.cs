@@ -33,10 +33,10 @@ public class DeleteUserHandler
     
     public async Task<bool> Handle(DeleteUser request, CancellationToken ct)
     {
-        var isAllowedToCreateAdmin = await _intentionManager
+        var isAllowedToDelete = await _intentionManager
             .ResolveAsync(AdminIntention.DeleteUser, ct);
 
-        if (!isAllowedToCreateAdmin)
+        if (!isAllowedToDelete)
             throw new IntentionException();
 
         var existingUser = await _userSearchRepository.GetByLoginAsync(request.Login, ct);

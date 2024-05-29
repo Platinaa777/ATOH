@@ -28,10 +28,10 @@ public class GetUserForAdminHandler
 
     public async Task<UserModelForAdmin> Handle(GetUserForAdmin request, CancellationToken ct)
     {
-        var isAllowedToCreateAdmin = await _intentionManager
+        var isAllowedToGetUser = await _intentionManager
             .ResolveAsync(AdminIntention.GetUserForAdmin, ct);
 
-        if (!isAllowedToCreateAdmin)
+        if (!isAllowedToGetUser)
             throw new IntentionException();
 
         var user = await _userSearchRepository.GetByLoginAsync(request.UserLogin, ct);
