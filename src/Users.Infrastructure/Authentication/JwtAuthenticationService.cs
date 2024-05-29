@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Users.Application.Authentication;
 using Users.Domain.Authentication;
+using Users.Domain.Users;
 using IAuthenticationService = Users.Domain.Authentication.IAuthenticationService;
 
 namespace Users.Infrastructure.Authentication;
@@ -55,6 +56,32 @@ public class JwtAuthenticationService : IAuthenticationService
         {
             return Identity.CreateGuestIdentity();   
         }
+    }
+
+    public string GenerateAccessToken(User user)
+    {
+        var claims = new[]
+        {
+            new Claim("UserId", user.Id.ToString()),
+            new Claim("Login", user.Login),
+            new Claim("IsAdmin", user.IsAdmin.ToString())
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authOptions.JwtKey));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var expiration = DateTime.Now.AddMinutes(_authOptions.ExpireMinutes);
+        // Create the JWT token
+        var token = new JwtSecurityToken(
+            claims: claims,
+            expires: expiration,
+            signingCredentials: credentials
+        );
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var tokenString = tokenHandler.WriteToken(token);
+
+        return tokenString;
     }
 
     private Identity ExtractIdentity(ClaimsPrincipal principal)

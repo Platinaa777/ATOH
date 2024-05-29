@@ -13,15 +13,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\ChangeLogin\" />
-      <Folder Include="Commands\ChangeUserInformations\" />
+      <Folder Include="Commands\ChangePassword\" />
       <Folder Include="Commands\DeleteUser\" />
       <Folder Include="Commands\RecoverUser\" />
       <Folder Include="Queries\GetActivesUsers\" />
       <Folder Include="Queries\GetUserForAdmin\" />
       <Folder Include="Queries\GetUserInfo\" />
       <Folder Include="Queries\GetUsersOlderThan\" />
-      <Folder Include="Security\" />
     </ItemGroup>
 
     <ItemGroup>

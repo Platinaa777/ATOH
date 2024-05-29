@@ -9,7 +9,6 @@ var configuration = builder.Configuration;
 builder.Services
     .AddApplicationServices()
     .AddApiLogging()
-    // .AddCustomMiddlewares()
     .AddCustomSwagger()
     .AddAuthServices(configuration);
 

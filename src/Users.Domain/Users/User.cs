@@ -1,3 +1,5 @@
+using Users.Domain.Users.Enumerations;
+
 namespace Users.Domain.Users;
 
 public class User
@@ -23,17 +25,39 @@ public class User
 
     public string CreatedBy { get; set; } = string.Empty;
 
-    public DateTime ModifiedOn { get; set; }
+    public DateTime? ModifiedOn { get; set; }
 
-    public string ModifiedBy { get; set; } = string.Empty;
+    public string? ModifiedBy { get; set; } = string.Empty;
 
-    public DateTime RevokedOn { get; set; }
+    public DateTime? RevokedOn { get; set; }
 
-    public string RevokedBy { get; set; } = string.Empty;
+    public string? RevokedBy { get; set; } = string.Empty;
 
-    public void RegisterUser(string createdBy, DateTime creationTime)
+    public void RegisterUser(string createdBy, DateTime creationTime, string hashedPassword)
     {
         CreatedBy = createdBy;
         CreatedOn = creationTime;
+        Password = hashedPassword;
+    }
+
+    public void ChangeBirthday(DateTime birthday, string modifiedBy, DateTime modifiedOn)
+    {
+        Birthday = birthday;
+        ModifiedBy = modifiedBy;
+        ModifiedOn = modifiedOn;
+    }
+    
+    public void ChangeGender(int gender, string modifiedBy, DateTime modifiedOn)
+    {
+        Gender = GenderType.FromValue(gender)?.Id ?? throw new ArgumentException("Gender id is invalid");
+        ModifiedBy = modifiedBy;
+        ModifiedOn = modifiedOn;
+    }
+    
+    public void ChangeName(string name, string modifiedBy, DateTime modifiedOn)
+    {
+        Name = name;
+        ModifiedBy = modifiedBy;
+        ModifiedOn = modifiedOn;
     }
 }
