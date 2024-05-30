@@ -11,6 +11,14 @@ docker-compose up -d
 Логин админа - admin123
 Пароль админа - admin123
 
+Пока с docker происходят трудности в связи с блокировкой dockerhub, попытаюсь через vpn прокинуть image в свой registry, если не будет, то просто запустите через docker-compose саму бд, а приложение
+
+```
+❯ dotnet build
+❯ cd src/Users.Api/
+❯ dotnet run
+```
+
 ## Cтруктура проекта
 
 ```
