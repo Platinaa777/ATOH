@@ -7,6 +7,6 @@ public class AuthOptions
     public bool ValidateIssuer { get; set; }
     public bool ValidateLifetime { get; set; }
     public int ClockSkew { get; set; }
-    public string JwtKey { get; set; }
+    public string JwtKey { get; set; } = string.Empty;
     public int ExpireMinutes { get; set; }
 }

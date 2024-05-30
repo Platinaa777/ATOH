@@ -11,19 +11,19 @@ public class RegisterUserValidator
         RuleFor(x => x.Login)
             .NotEmpty()
             .WithMessage("Login is required.")
-            .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
+            .Matches(RegexConstants.CredentialRegex)
             .WithMessage("Login can only contain Latin and Cyrillic letters.");
         
         RuleFor(x => x.Password)
             .NotEmpty()
             .WithMessage("Password is required.")
-            .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
+            .Matches(RegexConstants.CredentialRegex)
             .WithMessage("Password can only contain Latin and Cyrillic letters.");
         
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage("Name is required.")
-            .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
+            .Matches(RegexConstants.NameRegex)
             .WithMessage("Name can only contain Latin and Cyrillic letters.");
 
         RuleFor(x => x.Gender)
@@ -34,7 +34,7 @@ public class RegisterUserValidator
         // так что думаю оставлю, что система не может регистрировать пользователей
         // которые родятся в будущем
         RuleFor(x => x.Birthday)
-            .LessThan(DateTime.Now)
+            .Must(birthday => !birthday.HasValue || birthday.Value < DateTime.UtcNow)
             .WithMessage("Birthday should be less than current time");
     }
 }

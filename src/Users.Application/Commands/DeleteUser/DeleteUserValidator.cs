@@ -11,7 +11,7 @@ public class DeleteUserValidator
         RuleFor(x => x.Login)
             .NotEmpty()
             .WithMessage("Login is required.")
-            .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
+            .Matches(RegexConstants.CredentialRegex)
             .WithMessage("Login can only contain Latin and Cyrillic letters.");
     }
 }

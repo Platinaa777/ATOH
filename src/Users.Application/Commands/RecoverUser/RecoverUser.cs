@@ -4,5 +4,5 @@ namespace Users.Application.Commands.RecoverUser;
 
 public class RecoverUser : IRequest<bool>
 {
-    public string Login { get; set; }
+    public string Login { get; set; } = string.Empty;
 }

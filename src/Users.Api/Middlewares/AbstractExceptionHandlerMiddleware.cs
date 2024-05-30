@@ -4,7 +4,7 @@ namespace Users.Api.Middlewares;
 
 public abstract class AbstractExceptionHandlerMiddleware
 {
-    private readonly ILogger<AbstractExceptionHandlerMiddleware> _logger;
+    protected readonly ILogger<AbstractExceptionHandlerMiddleware> _logger;
     private readonly RequestDelegate _next;
     protected AbstractExceptionHandlerMiddleware(
         ILogger<AbstractExceptionHandlerMiddleware> logger,
@@ -24,9 +24,6 @@ public abstract class AbstractExceptionHandlerMiddleware
         }
         catch (Exception e)
         {
-            _logger.LogError("Error while executing request: {@RequestPath} with error message: {@ErrorMessage}",
-                context.Request.Path.Value,
-                e.Message);
             var response = context.Response;
             response.ContentType = "application/json";
             

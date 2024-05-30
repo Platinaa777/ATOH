@@ -31,13 +31,13 @@ public class GetUserInfoHandler
     
     public async Task<GetUserResponse> Handle(GetUserInfo request, CancellationToken ct)
     {
-        var isAllowedToCreateAdmin = await _intentionManager
+        var isAllowedToGetUser = await _intentionManager
             .ResolveAsync(UserIntention.GetUserInfo, ct);
 
-        if (!isAllowedToCreateAdmin)
+        if (!isAllowedToGetUser)
             throw new IntentionException();
 
-        var user = await _userSearchRepository.GetByLoginAsync(_identityProvider.CurrentIdentity.Login, ct);
+        var user = await _userSearchRepository.GetActiveUserByLoginAsync(_identityProvider.CurrentIdentity.Login, ct);
         
         return user is null 
             ? throw new NotFoundUserException(_identityProvider.CurrentIdentity.Login)

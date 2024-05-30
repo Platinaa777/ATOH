@@ -33,20 +33,20 @@ public class DeleteUserHandler
     
     public async Task<bool> Handle(DeleteUser request, CancellationToken ct)
     {
-        var isAllowedToCreateAdmin = await _intentionManager
+        var isAllowedToDelete = await _intentionManager
             .ResolveAsync(AdminIntention.DeleteUser, ct);
 
-        if (!isAllowedToCreateAdmin)
+        if (!isAllowedToDelete)
             throw new IntentionException();
 
-        var existingUser = await _userSearchRepository.GetByLoginAsync(request.Login, ct);
+        var existingUser = await _userSearchRepository.GetActiveUserByLoginAsync(request.Login, ct);
         if (existingUser is null)
             throw new NotFoundUserException(request.Login);
 
         if (request.IsSoftDelete)
-            await _userRepository.SoftDeleteAsync(existingUser.Id, ct);
+            await _userRepository.SoftDeleteAsync(existingUser.Id, _identityProvider.CurrentIdentity.Login, ct);
         else
-            await _userRepository.ForceDeleteAsync(existingUser.Id, _identityProvider.CurrentIdentity.Login, ct);
+            await _userRepository.ForceDeleteAsync(existingUser.Id, ct);
         
         
         await _unitOfWork.SaveChangesAsync(ct);

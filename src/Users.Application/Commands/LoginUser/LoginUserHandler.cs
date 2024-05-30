@@ -28,14 +28,14 @@ public class LoginUserHandler
     
     public async Task<LoginResponse> Handle(LoginUser request, CancellationToken ct)
     {
-        var existingUser = await _userSearchRepository.GetByLoginAsync(request.Login, ct);
+        var existingUser = await _userSearchRepository.GetActiveUserByLoginAsync(request.Login, ct);
         
         if (existingUser is null || existingUser.RevokedOn is not null)
             throw new NotFoundUserException(request.Login);
 
         var isPasswordMatching = _hasherPassword.Verify(existingUser.Password, request.Password);
         if (!isPasswordMatching)
-            return new LoginResponse(false, string.Empty);
+            return new LoginResponse(false, string.Empty, "Неверный пароль");
 
         var newToken = _authenticationService.GenerateAccessToken(existingUser);
 

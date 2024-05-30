@@ -1,0 +1,34 @@
+version: '3.9'
+
+networks:
+  aton:
+    driver: bridge
+    
+volumes:
+  aton:
+
+services:
+  postgres_db:
+    container_name: postgres_db
+    image: postgres:12
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_USER: denis
+      POSTGRES_PASSWORD: denis123
+      POSTGRES_DB: aton_db
+    networks: [ aton ]
+    volumes:
+      - aton:/var/lib/postgresql/data
+  
+  aton_app:
+    container_name: aton_app
+    image: platinaa777/aton:01
+    ports:
+      - '5001:80'
+    environment:
+      ConnectionStrings__PostgreSQL: 'User ID=denis;password=denis123;port=5432;host=postgres_db;database=aton_db'
+      DOCKER_RUNNING: 'true'
+    networks: [ aton ]
+    depends_on:
+      - postgres_db

@@ -52,8 +52,9 @@ public class RegisterUserHandler
 
         var user = _mapper.Map<User>(request);
         user.RegisterUser(
+            Guid.NewGuid(),
             createdBy: GetIdentityLogin(request.Login),
-            creationTime: DateTime.Now,
+            creationTime: DateTime.UtcNow,
             _hasherPassword.HashPassword(request.Password));
 
         await _userRepository.AddUserAsync(user, ct);
@@ -64,14 +65,14 @@ public class RegisterUserHandler
 
     private string GetIdentityLogin(string currentLogin)
     {
-        return string.IsNullOrWhiteSpace(_identityProvider.CurrentIdentity.Login)
+        return string.IsNullOrWhiteSpace(_identityProvider.CurrentIdentity.Login) || Guid.Empty.ToString() == currentLogin
             ? currentLogin
             : _identityProvider.CurrentIdentity.Login;
     }
 
     private async Task ValidateUserIsNotExistOrThrow(string login, CancellationToken ct)
     {
-        var existingUser = await _userSearchRepository.GetByLoginAsync(login, ct);
+        var existingUser = await _userSearchRepository.GetActiveUserByLoginAsync(login, ct);
         if (existingUser is not null)
             throw new DuplicateUserException(login);
     }

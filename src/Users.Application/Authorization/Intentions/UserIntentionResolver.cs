@@ -21,14 +21,14 @@ public class UserIntentionResolver : IIntentionResolver<UserIntention>
         if (userIdentity.IsAdmin)
             return true;
 
-        var user = await _userSearchRepository.GetByLoginAsync(userIdentity.Login, ct);
+        var user = await _userSearchRepository.GetActiveUserByLoginAsync(userIdentity.Login, ct);
         if (user is null)
             throw new NotFoundUserException(userIdentity.Login);
         
         return intention switch
         {
             UserIntention.ChangeUserInfo 
-                or UserIntention.GetUserInfo => user.RevokedOn is null,
+                or UserIntention.GetUserInfo => user.RevokedOn is null && userIdentity.UserId != Guid.Empty,
             _ => false
         };
     }

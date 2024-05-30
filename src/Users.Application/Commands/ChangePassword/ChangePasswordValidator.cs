@@ -10,13 +10,13 @@ public class ChangePasswordValidator : AbstractValidator<ChangePassword>
         RuleFor(x => x.CurrentLogin)
             .NotEmpty()
             .WithMessage("Login is required.")
-            .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
+            .Matches(RegexConstants.CredentialRegex)
             .WithMessage("Login can only contain Latin and Cyrillic letters.");
         
         RuleFor(x => x.NewPassword)
             .NotEmpty()
             .WithMessage("Password is required.")
-            .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
+            .Matches(RegexConstants.CredentialRegex)
             .WithMessage("Password can only contain Latin and Cyrillic letters.");
     }
 }

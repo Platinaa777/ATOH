@@ -4,9 +4,9 @@ namespace Users.Domain.Users.Enumerations;
 
 public class GenderType : Enumeration
 {
-    public static readonly GenderType Female = new GenderType(1, "Female");
-    public static readonly GenderType Male = new GenderType(2, "Male");
-    public static readonly GenderType None = new GenderType(3, "None");
+    public static readonly GenderType Female = new GenderType(0, "Female");
+    public static readonly GenderType Male = new GenderType(1, "Male");
+    public static readonly GenderType None = new GenderType(2, "None");
     
     public GenderType(int id, string name) : base(id, name)
     {

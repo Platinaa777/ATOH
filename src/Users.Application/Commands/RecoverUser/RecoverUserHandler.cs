@@ -32,13 +32,13 @@ public class RecoverUserHandler
     
     public async Task<bool> Handle(RecoverUser request, CancellationToken ct)
     {
-        var isAllowedToCreateAdmin = await _intentionManager
+        var isAllowedToRecoverUser = await _intentionManager
             .ResolveAsync(AdminIntention.RecoverUser, ct);
 
-        if (!isAllowedToCreateAdmin)
+        if (!isAllowedToRecoverUser)
             throw new IntentionException();
         
-        var existingUser = await _userSearchRepository.GetByLoginAsync(request.Login, ct);
+        var existingUser = await _userSearchRepository.GetRevokedUserByLoginAsync(request.Login, ct);
         if (existingUser is null)
             throw new NotFoundUserException(request.Login);
         
@@ -53,6 +53,6 @@ public class RecoverUserHandler
         user.RevokedBy = null;
         user.RevokedOn = null;
         user.ModifiedBy = _identityProvider.CurrentIdentity.Login;
-        user.ModifiedOn = DateTime.Now;
+        user.ModifiedOn = DateTime.UtcNow;
     }
 }

@@ -5,7 +5,8 @@ namespace Users.Domain.Users.Repos;
 /// </summary>
 public interface IUserSearchRepository
 {
-    Task<User?> GetByLoginAsync(string userLogin, CancellationToken ct = default);
+    Task<User?> GetActiveUserByLoginAsync(string userLogin, CancellationToken ct = default);
+    Task<User?> GetRevokedUserByLoginAsync(string userLogin, CancellationToken ct = default);
     Task<List<User>> GetActiveUsersAsync(CancellationToken ct = default);
     Task<List<User>> GetUserWithAgeBiggerThanAsync(int age, CancellationToken ct = default);
 }

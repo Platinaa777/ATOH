@@ -12,16 +12,13 @@ namespace Users.Infrastructure.Authentication;
 public class JwtAuthenticationService : IAuthenticationService
 {
     private readonly AuthOptions _authOptions;
+    private readonly TokenValidationParameters _tokenValidationParameters;
 
     public JwtAuthenticationService(
         AuthOptions authOptions)
     {
         _authOptions = authOptions;
-    }
-    
-    public Identity AuthenticateIdentity(string token, CancellationToken ct = default)
-    {
-        var tokenValidationParameters = new TokenValidationParameters()
+        _tokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = _authOptions.ValidateIssuerKey,
             ValidateAudience = _authOptions.ValidateAudience,
@@ -30,13 +27,16 @@ public class JwtAuthenticationService : IAuthenticationService
             ClockSkew = new TimeSpan(_authOptions.ClockSkew),
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authOptions.JwtKey))
         };
-
+    }
+    
+    public Identity AuthenticateIdentity(string token, CancellationToken ct = default)
+    {
         try
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var principal = tokenHandler.ValidateToken(
                 token,
-                tokenValidationParameters,
+                _tokenValidationParameters,
                 out SecurityToken securityToken);
 
             JwtSecurityToken? jwtSecurityToken = securityToken as JwtSecurityToken;
@@ -64,13 +64,13 @@ public class JwtAuthenticationService : IAuthenticationService
         {
             new Claim("UserId", user.Id.ToString()),
             new Claim("Login", user.Login),
-            new Claim("IsAdmin", user.IsAdmin.ToString())
+            new Claim("IsAdmin", user.IsAdmin.ToString()),
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authOptions.JwtKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var expiration = DateTime.Now.AddMinutes(_authOptions.ExpireMinutes);
+        var expiration = DateTime.UtcNow.AddMinutes(_authOptions.ExpireMinutes);
         // Create the JWT token
         var token = new JwtSecurityToken(
             claims: claims,
@@ -96,7 +96,7 @@ public class JwtAuthenticationService : IAuthenticationService
         var identity = new Identity(
             userId,
             login,
-            isAdmin == "true");
+            isAdmin == "True");
         
         return identity;
     }

@@ -27,10 +27,10 @@ public class GetUsersOlderThanHandler
     
     public async Task<List<UserModelForAdmin>> Handle(GetUsersOlderThan request, CancellationToken ct)
     {
-        var isAllowedToCreateAdmin = await _intentionManager
+        var isAllowedToGetUser = await _intentionManager
             .ResolveAsync(AdminIntention.GetUserForAdmin, ct);
 
-        if (!isAllowedToCreateAdmin)
+        if (!isAllowedToGetUser)
             throw new IntentionException();
 
         var users = await _userSearchRepository.GetUserWithAgeBiggerThanAsync(request.Age, ct);

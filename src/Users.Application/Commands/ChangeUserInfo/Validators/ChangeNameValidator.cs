@@ -11,13 +11,13 @@ public class ChangeNameValidator : AbstractValidator<ChangeName>
         RuleFor(x => x.Login)
             .NotEmpty()
             .WithMessage("Login is required.")
-            .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
+            .Matches(RegexConstants.CredentialRegex)
             .WithMessage("Login can only contain Latin and Cyrillic letters.");
         
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage("Name is required.")
-            .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
+            .Matches(RegexConstants.NameRegex)
             .WithMessage("Name can only contain Latin and Cyrillic letters.");
     }
 }

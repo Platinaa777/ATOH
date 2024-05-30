@@ -23,10 +23,10 @@ public class GetActiveUserHandler
     
     public async Task<List<User>> Handle(GetActiveUsers request, CancellationToken ct)
     {
-        var isAllowedToCreateAdmin = await _intentionManager
+        var isAllowedToGetActiveUsers = await _intentionManager
             .ResolveAsync(AdminIntention.GetActiveUsers, ct);
 
-        if (!isAllowedToCreateAdmin)
+        if (!isAllowedToGetActiveUsers)
             throw new IntentionException();
         
         var users = await _userSearchRepository.GetActiveUsersAsync(ct);

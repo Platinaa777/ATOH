@@ -40,7 +40,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.CreatedBy)
             .HasColumnName("created_by");
-        
+
         builder.Property(x => x.ModifiedOn)
             .HasColumnName("modified_on");
         

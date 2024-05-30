@@ -2,8 +2,6 @@ namespace Users.Domain.Authentication;
 
 public class Identity
 {
-    public string Id { get; }
-
     /// <summary>
     /// Should fetch from HttpContext in middlewares
     /// </summary>
@@ -22,7 +20,7 @@ public class Identity
 
     public Identity(string id, string login, bool isAdmin)
     {
-        Id = id;
+        UserId = Guid.Parse(id);
         Login = login;
         IsAdmin = isAdmin;
     }
