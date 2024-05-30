@@ -33,10 +33,11 @@ public class User
 
     public string? RevokedBy { get; set; } = string.Empty;
 
-    public void RegisterUser(string createdBy, DateTime creationTime, string hashedPassword)
+    public void RegisterUser(Guid id, string createdBy, DateTime creationTime, string hashedPassword)
     {
+        Id = id; 
         CreatedBy = createdBy;
-        CreatedOn = creationTime;
+        CreatedOn = creationTime.ToUniversalTime();
         Password = hashedPassword;
     }
 
@@ -44,34 +45,34 @@ public class User
     {
         Birthday = birthday;
         ModifiedBy = modifiedBy;
-        ModifiedOn = modifiedOn;
+        ModifiedOn = modifiedOn.ToUniversalTime();
     }
     
     public void ChangeGender(int gender, string modifiedBy, DateTime modifiedOn)
     {
         Gender = GenderType.FromValue(gender)?.Id ?? throw new ArgumentException("Gender id is invalid");
         ModifiedBy = modifiedBy;
-        ModifiedOn = modifiedOn;
+        ModifiedOn = modifiedOn.ToUniversalTime();
     }
     
     public void ChangeName(string name, string modifiedBy, DateTime modifiedOn)
     {
         Name = name;
         ModifiedBy = modifiedBy;
-        ModifiedOn = modifiedOn;
+        ModifiedOn = modifiedOn.ToUniversalTime();
     }
     
     public void ChangeLogin(string newLogin, string modifiedBy, DateTime modifiedOn)
     {
         Login = newLogin;
         ModifiedBy = modifiedBy;
-        ModifiedOn = modifiedOn;
+        ModifiedOn = modifiedOn.ToUniversalTime();
     }
     
     public void ChangePassword(string newPassword, string modifiedBy, DateTime modifiedOn)
     {
         Password = newPassword;
         ModifiedBy = modifiedBy;
-        ModifiedOn = modifiedOn;
+        ModifiedOn = modifiedOn.ToUniversalTime();
     }
 }

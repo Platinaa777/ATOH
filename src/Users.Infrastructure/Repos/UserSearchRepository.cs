@@ -14,11 +14,17 @@ public class UserSearchRepository : IUserSearchRepository
         _dbContext = dbContext;
     }
     
-    public Task<User?> GetByLoginAsync(string userLogin, CancellationToken ct = default)
+    public Task<User?> GetActiveUserByLoginAsync(string userLogin, CancellationToken ct = default)
     {
         return _dbContext.Users
             .FirstOrDefaultAsync(x => 
                 x.Login == userLogin && x.RevokedOn == null, ct);
+    }
+
+    public Task<User?> GetRevokedUserByLoginAsync(string userLogin, CancellationToken ct = default)
+    {
+        return _dbContext.Users
+            .FirstOrDefaultAsync(x => x.Login == userLogin, ct);
     }
 
     public Task<List<User>> GetActiveUsersAsync(CancellationToken ct = default)
@@ -33,12 +39,12 @@ public class UserSearchRepository : IUserSearchRepository
 
     public Task<List<User>> GetUserWithAgeBiggerThanAsync(int age, CancellationToken ct = default)
     {
-        var minimumBirthday = DateTime.Now.AddYears(-age);
+        var minimumBirthday = DateTime.UtcNow.AddYears(-age);
 
         return _dbContext.Users
             .AsQueryable()
             .AsNoTracking()
-            .Where(x => x.Birthday > minimumBirthday)
+            .Where(x => x.Birthday < minimumBirthday)
             .ToListAsync(ct);
     }
 }

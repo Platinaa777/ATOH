@@ -11,9 +11,17 @@ builder.Services
     .AddApiLogging()
     .AddCustomSwagger()
     .AddAuthServices(configuration)
+    .AddCustomAuth(configuration)
     .AddDataLayer(configuration);
 
 var app = builder.Build();
+
+var dockerRunning = app.Configuration["DOCKER_RUNNING"];
+if (app.Environment.IsDevelopment() || !string.IsNullOrEmpty(dockerRunning))
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app
     .UseLoggingRequests()

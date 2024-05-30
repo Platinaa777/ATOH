@@ -40,11 +40,11 @@ public class ChangeUserInfoHandler
             _intentionManager,
             request.Login, ct);
 
-        var existingUser = await _userSearchRepository.GetByLoginAsync(request.Login, ct);
+        var existingUser = await _userSearchRepository.GetActiveUserByLoginAsync(request.Login, ct);
         if (existingUser is null)
             throw new NotFoundUserException(request.Login);
 
-        existingUser.ChangeBirthday(request.Birthday, _identityProvider.CurrentIdentity.Login, DateTime.Now);
+        existingUser.ChangeBirthday(request.Birthday, _identityProvider.CurrentIdentity.Login, DateTime.UtcNow);
 
         await _unitOfWork.SaveChangesAsync(ct);
         return true;
@@ -57,11 +57,11 @@ public class ChangeUserInfoHandler
             _intentionManager,
             request.Login, ct);
 
-        var existingUser = await _userSearchRepository.GetByLoginAsync(request.Login, ct);
+        var existingUser = await _userSearchRepository.GetActiveUserByLoginAsync(request.Login, ct);
         if (existingUser is null)
             throw new NotFoundUserException(request.Login);
 
-        existingUser.ChangeName(request.Name, _identityProvider.CurrentIdentity.Login, DateTime.Now);
+        existingUser.ChangeName(request.Name, _identityProvider.CurrentIdentity.Login, DateTime.UtcNow);
 
         await _unitOfWork.SaveChangesAsync(ct);
         return true;
@@ -74,11 +74,11 @@ public class ChangeUserInfoHandler
             _intentionManager,
             request.Login, ct);
 
-        var existingUser = await _userSearchRepository.GetByLoginAsync(request.Login, ct);
+        var existingUser = await _userSearchRepository.GetActiveUserByLoginAsync(request.Login, ct);
         if (existingUser is null)
             throw new NotFoundUserException(request.Login);
 
-        existingUser.ChangeGender(request.Gender, _identityProvider.CurrentIdentity.Login, DateTime.Now);
+        existingUser.ChangeGender(request.Gender, _identityProvider.CurrentIdentity.Login, DateTime.UtcNow);
 
         await _unitOfWork.SaveChangesAsync(ct);
         return true;

@@ -4,20 +4,21 @@ namespace Users.Api.Middlewares;
 
 public class AuthenticationMiddleware
 {
-    private readonly IIdentityProvider _identityProvider;
-    private readonly IAuthenticationService _authenticationService;
+    private readonly ILogger<AuthenticationMiddleware> _logger;
     private readonly RequestDelegate _next;
 
     public AuthenticationMiddleware(
-        IIdentityProvider identityProvider,
-        IAuthenticationService authenticationService, RequestDelegate next)
+        ILogger<AuthenticationMiddleware> logger,
+        RequestDelegate next)
     {
-        _identityProvider = identityProvider;
-        _authenticationService = authenticationService;
+        _logger = logger;
         _next = next;
     }
     
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(
+        HttpContext context,
+        IIdentityProvider identityProvider,
+        IAuthenticationService authenticationService)
     {
         var token = context.Request.Headers["Authorization"]
             .FirstOrDefault()
@@ -25,14 +26,15 @@ public class AuthenticationMiddleware
 
         if (string.IsNullOrWhiteSpace(token))
         {
-            _identityProvider.CurrentIdentity = Identity.CreateGuestIdentity();
+            _logger.LogInformation("Guest request");
+            identityProvider.CurrentIdentity = Identity.CreateGuestIdentity();
             await _next(context);
             return;
         }
 
-        _identityProvider.CurrentIdentity = _authenticationService
+        identityProvider.CurrentIdentity = authenticationService
             .AuthenticateIdentity(token);
-
+        _logger.LogInformation("Authenticated user request: {@Identity}", identityProvider.CurrentIdentity);
         await _next(context);
     }
 }
@@ -41,6 +43,6 @@ public static class AuthenticationMiddlewareExtensions
 {
     public static IApplicationBuilder UseIdentityProvider(this IApplicationBuilder builder)
     {
-        return builder.UseMiddleware<ExceptionMiddleware>();
+        return builder.UseMiddleware<AuthenticationMiddleware>();
     }
 }

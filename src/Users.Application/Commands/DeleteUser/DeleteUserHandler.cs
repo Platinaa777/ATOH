@@ -39,14 +39,14 @@ public class DeleteUserHandler
         if (!isAllowedToDelete)
             throw new IntentionException();
 
-        var existingUser = await _userSearchRepository.GetByLoginAsync(request.Login, ct);
+        var existingUser = await _userSearchRepository.GetActiveUserByLoginAsync(request.Login, ct);
         if (existingUser is null)
             throw new NotFoundUserException(request.Login);
 
         if (request.IsSoftDelete)
-            await _userRepository.SoftDeleteAsync(existingUser.Id, ct);
+            await _userRepository.SoftDeleteAsync(existingUser.Id, _identityProvider.CurrentIdentity.Login, ct);
         else
-            await _userRepository.ForceDeleteAsync(existingUser.Id, _identityProvider.CurrentIdentity.Login, ct);
+            await _userRepository.ForceDeleteAsync(existingUser.Id, ct);
         
         
         await _unitOfWork.SaveChangesAsync(ct);

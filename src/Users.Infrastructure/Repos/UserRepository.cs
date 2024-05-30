@@ -23,15 +23,15 @@ public class UserRepository : IUserRepository
         await _dbContext.Users.AddAsync(user, ct);
     }
 
-    public Task SoftDeleteAsync(Guid id, CancellationToken ct = default)
+    public Task SoftDeleteAsync(Guid id, string adminLogin, CancellationToken ct = default)
     {
         return _dbContext.Users.Where(u => u.Id == id)
             .ExecuteUpdateAsync(entity => entity
-                    .SetProperty(f => f.RevokedBy, _ => null)
-                    .SetProperty(field => field.RevokedOn, _ => null), ct);
+                    .SetProperty(f => f.RevokedBy, _ => adminLogin)
+                    .SetProperty(field => field.RevokedOn, _ => DateTime.UtcNow), ct);
     }
 
-    public Task ForceDeleteAsync(Guid id, string adminLogin, CancellationToken ct = default)
+    public Task ForceDeleteAsync(Guid id, CancellationToken ct = default)
     {
         return _dbContext.Users
             .Where(u => u.Id == id)

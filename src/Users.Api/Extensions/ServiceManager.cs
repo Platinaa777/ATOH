@@ -1,27 +1,17 @@
 using System.Reflection;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
-using Users.Api.Filters;
-using Users.Api.Middlewares;
 using Users.Application.AssemblyInfo;
-using Users.Application.Authentication;
-using Users.Application.Authorization;
-using Users.Application.Authorization.Intentions;
 using Users.Application.Behavior;
 using Users.Application.Commands.RegisterUser;
-using Users.Application.Security;
 using Users.DataLayer.Database;
-using Users.Domain.Authentication;
-using Users.Domain.Authorization;
-using Users.Domain.Authorization.Intentions;
 using Users.Domain.Shared;
 using Users.Domain.Users.Repos;
-using Users.Infrastructure.Authentication;
 using Users.Infrastructure.Repos;
-using Users.Infrastructure.Security;
 
 namespace Users.Api.Extensions;
 
@@ -71,30 +61,44 @@ public static class ServiceManager
             .AddEndpointsApiExplorer()
             .AddSwaggerGen();
         
-        services.AddSingleton<IStartupFilter, SwaggerStartupFilter>();
+        services.AddSwaggerGen(opt =>
+        {
+            opt.SwaggerDoc("v1", new OpenApiInfo() { 
+                Title = $"{Assembly.GetEntryAssembly()!.GetName().Name}",
+                Version = "v1" 
+            });
+            opt.CustomSchemaIds(x => x.FullName);
+
+            // Add JWT Authentication options
+            var securityScheme = new OpenApiSecurityScheme
+            {
+                Name = "JWT Authentication",
+                Description = "Enter JWT Bearer token",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                Reference = new OpenApiReference
+                {
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                    Type = ReferenceType.SecurityScheme
+                }
+            };
+
+            opt.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
+            opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    securityScheme,
+                    new string[] { }
+                }
+            });
+        }); 
 
         return services;
     }
 
-    public static IServiceCollection AddAuthServices(this IServiceCollection services,
-        IConfiguration configuration)
-    {
-        services.Configure<AuthOptions>(configuration.GetSection("AuthOptions"));
-        services.AddSingleton<AuthOptions>(sp =>
-            sp.GetRequiredService<IOptions<AuthOptions>>().Value);
-        
-        services
-            .AddScoped<IIntentionResolver, AdminIntentionResolver>()
-            .AddScoped<IIntentionResolver, UserIntentionResolver>();
-
-        services
-            .AddScoped<IIdentityProvider, IdentityProvider>()
-            .AddScoped<IIntentionManager, IntentionManager>()
-            .AddScoped<IAuthenticationService, JwtAuthenticationService>()
-            .AddScoped<IHasherPassword, HasherPassword>();
-
-        return services;
-    }
+    
 
     public static IServiceCollection AddDataLayer(this IServiceCollection services,
         IConfiguration configuration)

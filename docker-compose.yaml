@@ -20,3 +20,15 @@ services:
     networks: [ aton ]
     volumes:
       - aton:/var/lib/postgresql/data
+  
+  aton_app:
+    container_name: aton_app
+    image: platinaa777/aton:01
+    ports:
+      - '5001:80'
+    environment:
+      ConnectionStrings__PostgreSQL: 'User ID=denis;password=denis123;port=5432;host=postgres_db;database=aton_db'
+      DOCKER_RUNNING: 'true'
+    networks: [ aton ]
+    depends_on:
+      - postgres_db

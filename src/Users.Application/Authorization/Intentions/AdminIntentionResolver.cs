@@ -13,7 +13,11 @@ public class AdminIntentionResolver : IIntentionResolver<AdminIntention>
     {
         return intention switch
         {
-            AdminIntention.CreateAdmin => ValueTask.FromResult(userIdentity.IsAdmin), 
+            AdminIntention.CreateAdmin 
+                or AdminIntention.DeleteUser
+                or AdminIntention.RecoverUser
+                or AdminIntention.GetActiveUsers
+                or AdminIntention.GetUserForAdmin => ValueTask.FromResult(userIdentity.IsAdmin), 
             _ => ValueTask.FromResult(false)
         };
     }

@@ -40,12 +40,12 @@ public class ChangePasswordHandler
             request.CurrentLogin,
             ct);
 
-        var user = await _userSearchRepository.GetByLoginAsync(request.CurrentLogin, ct);
+        var user = await _userSearchRepository.GetActiveUserByLoginAsync(request.CurrentLogin, ct);
         if (user is null)
             throw new NotFoundUserException(request.CurrentLogin);
 
         var hashedPassword = _hasherPassword.HashPassword(request.NewPassword);
-        user.ChangePassword(hashedPassword, _identityProvider.CurrentIdentity.Login, DateTime.Now);
+        user.ChangePassword(hashedPassword, _identityProvider.CurrentIdentity.Login, DateTime.UtcNow);
         
         await _unitOfWork.SaveChangesAsync(ct);
         return true; 

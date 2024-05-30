@@ -12,6 +12,6 @@ public class HasherPassword : IHasherPassword
 
     public bool Verify(string passwordDb, string requestPassword)
     {
-        return BCrypt.Net.BCrypt.Verify(requestPassword, passwordDb, hashType: HashType.SHA384);
+        return BCrypt.Net.BCrypt.EnhancedVerify(requestPassword, passwordDb, hashType: HashType.SHA384);
     }
 }

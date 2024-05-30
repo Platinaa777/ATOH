@@ -39,7 +39,7 @@ public class ChangeLoginHandler
 
         var user = await GetExistingUserAndValidateNewLoginAsync(request.CurrentLogin, request.NewLogin, ct);
         
-        user.ChangeLogin(request.NewLogin, _identityProvider.CurrentIdentity.Login, DateTime.Now);
+        user.ChangeLogin(request.NewLogin, _identityProvider.CurrentIdentity.Login, DateTime.UtcNow);
         
         await _unitOfWork.SaveChangesAsync(ct);
         return true;  
@@ -47,11 +47,11 @@ public class ChangeLoginHandler
 
     private async Task<User> GetExistingUserAndValidateNewLoginAsync(string currentLogin, string newLogin, CancellationToken ct)
     {
-        var existingUser = await _userSearchRepository.GetByLoginAsync(currentLogin, ct);
+        var existingUser = await _userSearchRepository.GetActiveUserByLoginAsync(currentLogin, ct);
         if (existingUser is null)
             throw new NotFoundUserException(currentLogin);
 
-        var existingUserWithNewLogin = await _userSearchRepository.GetByLoginAsync(newLogin, ct);
+        var existingUserWithNewLogin = await _userSearchRepository.GetActiveUserByLoginAsync(newLogin, ct);
         if (existingUserWithNewLogin is not null)
             throw new ArgumentException(
                 $"New login cant be applied, because user with login: {newLogin} is already exist");

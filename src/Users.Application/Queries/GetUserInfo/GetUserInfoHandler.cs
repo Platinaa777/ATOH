@@ -37,7 +37,7 @@ public class GetUserInfoHandler
         if (!isAllowedToGetUser)
             throw new IntentionException();
 
-        var user = await _userSearchRepository.GetByLoginAsync(_identityProvider.CurrentIdentity.Login, ct);
+        var user = await _userSearchRepository.GetActiveUserByLoginAsync(_identityProvider.CurrentIdentity.Login, ct);
         
         return user is null 
             ? throw new NotFoundUserException(_identityProvider.CurrentIdentity.Login)

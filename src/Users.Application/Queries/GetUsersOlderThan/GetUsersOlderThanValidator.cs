@@ -8,7 +8,7 @@ public class GetUsersOlderThanValidator : AbstractValidator<GetUsersOlderThan>
     public GetUsersOlderThanValidator()
     {
         RuleFor(x => x.Age)
-            .GreaterThanOrEqualTo(1)
+            .GreaterThanOrEqualTo(0)
             .WithMessage("Age should be positive");
     }
 }

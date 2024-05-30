@@ -1,6 +1,7 @@
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Newtonsoft.Json;
+using Users.Domain.Exceptions;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace Users.Api.Middlewares;
 
@@ -21,9 +22,21 @@ public class ExceptionMiddleware : AbstractExceptionHandlerMiddleware
             case ValidationException:
                 code = HttpStatusCode.BadRequest;
                 break;
+            case InvalidAuthTokenException 
+                or DuplicateUserException
+                or ArgumentException:
+                code = HttpStatusCode.BadRequest;
+                break;
+            case IntentionException:
+                code = HttpStatusCode.Unauthorized;
+                break;
+            case NotFoundUserException:
+                code = HttpStatusCode.NotFound;
+                break;
             default:
                 code = HttpStatusCode.InternalServerError;
-                errorMessage = exception.Message;
+                _logger.LogError("Exception: {@Exception}", exception);
+                errorMessage = "Some server error. Please try later";
                 break;
         }
         return (code, JsonConvert.SerializeObject(new {errorMessage}));

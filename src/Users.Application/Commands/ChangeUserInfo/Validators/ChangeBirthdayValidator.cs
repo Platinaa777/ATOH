@@ -11,11 +11,11 @@ public class ChangeBirthdayValidator : AbstractValidator<ChangeBirthday>
         RuleFor(x => x.Login)
             .NotEmpty()
             .WithMessage("Login is required.")
-            .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
+            .Matches(RegexConstants.CredentialRegex)
             .WithMessage("Login can only contain Latin and Cyrillic letters.");
         
         RuleFor(x => x.Birthday)
-            .LessThan(DateTime.Now)
+            .LessThan(DateTime.UtcNow)
             .WithMessage("Birthday should be less than current time");
     }
 }

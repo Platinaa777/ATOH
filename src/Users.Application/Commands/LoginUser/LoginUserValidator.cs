@@ -10,13 +10,13 @@ public class LoginUserValidator : AbstractValidator<LoginUser>
         RuleFor(x => x.Login)
             .NotEmpty()
             .WithMessage("Login is required.")
-            .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
+            .Matches(RegexConstants.CredentialRegex)
             .WithMessage("Login can only contain Latin and Cyrillic letters.");
         
         RuleFor(x => x.Password)
             .NotEmpty()
             .WithMessage("Password is required.")
-            .Matches(RegexConstants.OnlyLatinAndCyrillicLetters)
+            .Matches(RegexConstants.CredentialRegex)
             .WithMessage("Password can only contain Latin and Cyrillic letters.");
     }
 }
